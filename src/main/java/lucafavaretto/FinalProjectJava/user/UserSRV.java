@@ -1,7 +1,8 @@
 package lucafavaretto.FinalProjectJava.user;
 
+import lucafavaretto.FinalProjectJava.exceptions.BadRequestException;
 import lucafavaretto.FinalProjectJava.exceptions.NotFoundException;
-import org.apache.coyote.BadRequestException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +31,7 @@ public class UserSRV {
         return userDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
-    public User save(UserDTO userDTO) throws BadRequestException {
+    public User save(UserDTO userDTO) {
         if (userDAO.existsByEmail(userDTO.email())) throw new BadRequestException("email already exist");
         User user = new User(userDTO.name(), userDTO.surname(),
                 userDTO.email(), passwordEncoder.encode(userDTO.password()));
