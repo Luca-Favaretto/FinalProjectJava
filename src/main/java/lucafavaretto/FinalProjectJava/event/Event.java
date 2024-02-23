@@ -19,7 +19,7 @@ import java.util.Set;
 @Table(name = "event")
 public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     private String title;
@@ -45,5 +45,9 @@ public class Event {
         this.location = location;
         this.capacity = capacity;
         this.manager = manager;
+    }
+
+    public void addParticipant(User participant) {
+        this.participants.add(participant);
     }
 }

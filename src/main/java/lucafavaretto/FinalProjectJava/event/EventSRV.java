@@ -1,5 +1,6 @@
 package lucafavaretto.FinalProjectJava.event;
 
+import lucafavaretto.FinalProjectJava.exceptions.FullException;
 import lucafavaretto.FinalProjectJava.exceptions.NotFoundException;
 import lucafavaretto.FinalProjectJava.exceptions.UnauthorizedException;
 import lucafavaretto.FinalProjectJava.user.User;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.List;
 
 @Service
 public class EventSRV {
@@ -34,7 +35,7 @@ public class EventSRV {
 
     public Event findByIdAndUpdate(long id, EventDTO eventDTO, User user) {
         Event found = findById(id);
-        if (user.getId().equals(found.getManager().getId())) throw new UnauthorizedException("Manager with wrong id");
+        if (!user.getId().equals(found.getManager().getId())) throw new UnauthorizedException("Manager with wrong id");
         found.setTitle(eventDTO.title());
         found.setDescription(eventDTO.description());
         found.setDate(eventDTO.date());
@@ -43,8 +44,23 @@ public class EventSRV {
         return eventDAO.save(found);
     }
 
-    public void deleteById(long id) {
+    public void deleteById(long id, User user) {
         Event found = findById(id);
+        if (!user.getId().equals(found.getManager().getId())) throw new UnauthorizedException("Manager with wrong id");
         eventDAO.delete(found);
     }
+
+    public void reserve(long id, User user) {
+        Event found = findById(id);
+        if (found.getParticipants().size() < found.getCapacity()) {
+            found.addParticipant(user);
+            eventDAO.save(found);
+        } else throw new FullException();
+    }
+
+    public List<Event> findEventByParticipant(User user) {
+        return eventDAO.findEventByParticipant(user);
+    }
+  
+
 }

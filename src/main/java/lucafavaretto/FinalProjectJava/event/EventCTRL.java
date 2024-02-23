@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,12 +31,11 @@ public class EventCTRL {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public Event findById(@PathVariable long id) {
         return eventSRV.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/me")
     @PreAuthorize(("hasAuthority('MANAGER')"))
     @ResponseStatus(HttpStatus.CREATED)
     public Event save(@RequestBody EventDTO eventDTO, @AuthenticationPrincipal User currentAuthenticatedUser) throws IOException {
@@ -44,17 +44,28 @@ public class EventCTRL {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     public Event findByIdAndUpdate(@PathVariable long id, @RequestBody EventDTO eventDTO, @AuthenticationPrincipal User currentAuthenticatedUser) {
 
         return eventSRV.findByIdAndUpdate(id, eventDTO, currentAuthenticatedUser);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('MANAGER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAuthorById(@PathVariable long id) {
-        eventSRV.deleteById(id);
+    public void deleteAuthorById(@PathVariable long id, @AuthenticationPrincipal User currentAuthenticatedUser) {
+        eventSRV.deleteById(id, currentAuthenticatedUser);
+    }
+
+    @PatchMapping("/me/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void reserve(@PathVariable long id, @AuthenticationPrincipal User currentAuthenticatedUser) {
+        eventSRV.reserve(id, currentAuthenticatedUser);
+    }
+
+    @GetMapping("/me")
+    public List<Event> findEventByParticipant(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        return eventSRV.findEventByParticipant(currentAuthenticatedUser);
     }
 
 }
