@@ -3,7 +3,7 @@ package lucafavaretto.FinalProjectJava.exceptions;
 import java.util.UUID;
 
 public class NotFoundException extends RuntimeException {
-    public NotFoundException(UUID id) {
+    public NotFoundException(Long id) {
         super("Element with id " + id + " not found");
     }
 
