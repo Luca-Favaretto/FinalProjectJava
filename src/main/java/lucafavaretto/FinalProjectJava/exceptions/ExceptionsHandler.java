@@ -33,6 +33,12 @@ public class ExceptionsHandler {
         return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorsPayload handleUnauthorized(UnauthorizedException ex) {
+        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorsPayload handleIllegalArg(IllegalArgumentException ex) {
@@ -44,6 +50,7 @@ public class ExceptionsHandler {
     public ErrorsPayload handleAccessDenied(AccessDeniedException ex) {
         return new ErrorsPayload("Not authorized for this endpoint", LocalDateTime.now());
     }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
