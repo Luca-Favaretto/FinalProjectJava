@@ -51,6 +51,10 @@ public class User implements UserDetails {
         this.role = Role.USER;
     }
 
+    public void removeParticipant(Event event) {
+        this.events.remove(event);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
