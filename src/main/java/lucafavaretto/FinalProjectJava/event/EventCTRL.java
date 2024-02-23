@@ -63,10 +63,17 @@ public class EventCTRL {
         eventSRV.reserve(id, currentAuthenticatedUser);
     }
 
+    @PatchMapping("/removeMe/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeReserve(@PathVariable long id, @AuthenticationPrincipal User currentAuthenticatedUser) {
+        eventSRV.removeReserve(id, currentAuthenticatedUser);
+    }
+
     @GetMapping("/me")
     public List<Event> findEventByParticipant(@AuthenticationPrincipal User currentAuthenticatedUser) {
         return eventSRV.findEventByParticipant(currentAuthenticatedUser);
     }
+
 
 }
 

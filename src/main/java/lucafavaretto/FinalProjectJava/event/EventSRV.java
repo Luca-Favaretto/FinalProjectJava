@@ -58,9 +58,16 @@ public class EventSRV {
         } else throw new FullException();
     }
 
+    public void removeReserve(long id, User user) {
+        Event found = findById(id);
+        found.removeParticipant(user);
+        eventDAO.save(found);
+
+    }
+
     public List<Event> findEventByParticipant(User user) {
         return eventDAO.findEventByParticipant(user);
     }
-  
+
 
 }

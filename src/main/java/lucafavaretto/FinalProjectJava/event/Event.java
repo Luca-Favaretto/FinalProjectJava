@@ -50,4 +50,8 @@ public class Event {
     public void addParticipant(User participant) {
         this.participants.add(participant);
     }
+
+    public void removeParticipant(User participant) {
+        this.participants.remove(participant);
+    }
 }
