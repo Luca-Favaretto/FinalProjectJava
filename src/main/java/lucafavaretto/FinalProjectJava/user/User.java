@@ -40,6 +40,9 @@ public class User implements UserDetails {
     )
     private Set<Event> events;
 
+    @OneToMany(mappedBy = "manager")
+    private Set<Event> myEvents;
+
     public User(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;

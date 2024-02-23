@@ -32,6 +32,10 @@ public class Event {
     )
     private Set<User> participants;
 
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private User manager;
+
     public Event(String title, String description, LocalDate date, String location, int capacity) {
         this.title = title;
         this.description = description;
